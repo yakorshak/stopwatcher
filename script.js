@@ -4,28 +4,30 @@ const startButton = document.querySelector('.stopwatch__button-start');
 const pauseButton = document.querySelector('.stopwatch__button-pause');
 const resetButton = document.querySelector('.stopwatch__button-reset');
 const stopwatchDisplay = document.querySelector('.stopwatch__body');
-
-
+let countOfStartClicks = 0;
 
 startButton.addEventListener('click', function start(event) {
-    
-    if (event.target.closest('.stopwatch__button-start')){
-        // startButton.removeEventListener('click', start); (что тут?)
+    ++countOfStartClicks;
+    if (event.target.closest('.stopwatch__button-start') && countOfStartClicks == 1){
         let timerId = setTimeout(function tick(){
             pauseButton.addEventListener('click', function pause(event){
                 event.target.closest('.stopwatch__button-pause');
                 clearTimeout(timerId);
+                countOfStartClicks = 0;
                 return ;
             });
             resetButton.addEventListener('click', function reset(event){
                 event.target.closest('.stopwatch__button-reset');
                 clearTimeout(timerId);
                 resetStopwatch();
+                countOfStartClicks = 0;
                 return;
             });
             updateStopwatch(); // функция при вызове которой будет апдейтиться дисплей
             timerId = setTimeout(tick, 10);
         },10);
+    } else {
+        console.log('too much clicks Start');
     }
 });
 
